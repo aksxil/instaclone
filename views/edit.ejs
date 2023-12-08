@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram clone </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/edit.css">
+    <style>
+
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <!-- starting nav section of instagram -->
+        <nav>
+            <div class="navbar">
+                <a href="/">
+                    <div class="instagram-text-logo">
+                        <img src="https://i.postimg.cc/qMFTcDw1/instagram-text.png" id="white-color" alt="">
+                    </div>
+                </a>
+                <div class="sub-section" id="clicked">
+                    <i class="fa-solid fa-house"></i>
+                    <a href="#">Dark-mode</a>
+                </div>
+                <div class="sub-section">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <a href="#">Search</a>
+                </div>
+                <div class="sub-section">
+                    <i class="fa-regular fa-compass"></i>
+                    <a href="#">Explore</a>
+                </div>
+                <div class="sub-section">
+                    <i class="fa-solid fa-clapperboard"></i>
+                    <a href="#">Reels</a>
+                </div>
+                <div class="sub-section">
+                    <i class="fa-regular fa-message"></i>
+                    <a href="#">Messages</a>
+                </div>
+                <div class="sub-section" id="hidden2">
+                    <i class="fa-regular fa-heart"></i>
+                    <a href="#">Notification</a>
+                </div>
+                <div class="sub-section" id="hidden1">
+                    <i class="fa-solid fa-square-plus"></i>
+                    <a href="#">Create</a>
+                </div>
+                <div class="sub-section">
+                    <div class="profile-img">
+                        <img src="<%=user.profilePic%>" alt="">
+                    </div>
+                    <a href="/profile">Profile</a>
+                </div>
+                <div class="menu-section " id="hidden">
+                    <i class="fa-solid fa-bars"></i>
+                    <a href="#">More</a>
+                </div>
+            </div>
+
+        </nav>
+        <div class="middle-section">
+            <div class="update">
+                <h1>EDIT PROFILE</h1>
+                <div class="editbox">
+                    <div class="imgbox">
+                        <img src="data:image/png;base64,<%= user.profilePic %>" alt="Profile Picture" class="profile-pic">
+                    </div>
+                    <input type="file" id="profilePicInput" accept="image/*">
+                    <button onclick="uploadProfilePic()">Upload Profile Picture</button>
+                </div>
+                <form id="updatepro" action="/update-profile" method="post">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>"><br>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" value="<%= user.username %>"><br>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="<%= user.email %>"><br>
+                    <label for="bio">Bio:</label>
+                    <textarea name="bio" id="bio" cols="30" rows="8"><%=user.bio%></textarea>
+                    <!-- <input type="text" id="bio" name="bio" value="<%= user.bio %>"><br> -->
+                    <input type="submit" value="Save Changes">
+                </form>
+            </div>
+            
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script src="script.js"></script>
+    <script>
+        var dark = document.getElementById("clicked");
+        var white = document.getElementById("white-color");
+        var lol = document.getElementById("white-2color");
+        dark.onclick = function () {
+            document.body.classList.toggle("dark-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                white.style.filter = "brightness(5)";
+                lol.style.filter = "brightness(5)";
+            }
+            else {
+                white.style.filter = "none";
+                lol.style.filter = "none";
+            }
+        }
+
+       
+    function previewImage(event) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function() {
+            const imgElement = document.createElement('img');
+            imgElement.src = reader.result;
+            imgElement.className = 'preview-image';
+
+            const imagePreview = document.getElementById('imagePreview');
+            imagePreview.innerHTML = '';
+            imagePreview.appendChild(imgElement);
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function uploadProfilePic() {
+        const fileInput = document.getElementById('profilePicInput');
+        const file = fileInput.files[0];
+        const formData = new FormData();
+        formData.append('profilePic', file);
+
+        axios.post('/upload/profile-pic', formData)
+            .then(response => {
+                alert('Profile picture uploaded successfully');
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Error uploading profile picture');
+            });
+    }
+</script>
+
+</body>
+
+</html>

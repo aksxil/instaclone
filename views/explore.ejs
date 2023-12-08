@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram clone </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/profile.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+  <style>
+    .container{
+        
+        padding-top: 2vw;
+        padding-bottom: 2vw;
+    }
+    @media (max-width:600px) {
+      .container{
+        padding-left: 3vw;
+        padding-top: 7vh;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+    <nav>
+        <div class="navbar">
+            <a href="/">
+                <div class="instagram-text-logo">
+                    <img src="https://i.postimg.cc/qMFTcDw1/instagram-text.png" id="white-color" alt="">
+                </div>
+            </a>
+            <div class="sub-section" id="clicked">
+                <i class="fa-solid fa-house"></i>
+                <a href="#">Dark-mode</a>
+            </div>
+            <div id="srch" class="sub-section">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                 <a>Search</a>
+            </div>
+            <div class="sub-section">
+                <a style="color: black; display: flex;" href="/explore"><i class="fa-regular fa-compass"></i></a>
+                <a href="/explore">Explore</a>
+            </div>
+            <div class="sub-section">
+                <a style="color: black; display: flex;" href="/reels"><i class="fa-solid fa-clapperboard"></i></a>
+
+                <a href="/reels">Reels</a>
+            </div>
+            <div class="sub-section">
+
+                <a style="color: black; display: flex;" href="/chat"> <i class="fa-regular fa-message"></i></a>
+
+                <a href="/chat">Messages</a>
+            </div>
+            <div class="sub-section" id="hidden2">
+                <i class="fa-regular fa-heart"></i>
+                <a href="#">Notification</a>
+            </div>
+            <div id="createbtn" class="sub-section" id="hidden1">
+                <i class="fa-solid fa-square-plus"></i>
+                <a>Create</a>
+            </div>
+            <div class="sub-section">
+                <a style="display: flex;" href="/profile/<%=loggedInUser.username%>">
+                    <div class="profile-img">
+                        <img src="data:image/png;base64,<%= loggedInUser.profilePic %>" alt="Profile Picture"
+                            class="profile-pic">
+                    </div>
+                </a>
+                <a href="/profile/<%=loggedInUser.username%>">Profile</a>
+            </div>
+            <div class="menu-section " id="hidden">
+                <i class="fa-solid fa-bars"></i>
+                <a href="#">More</a>
+            </div>
+        </div>
+
+    </nav>
+               <div id="postid">
+                <section class="posts-list">
+                    <% if (posts.length > 0) { %>
+                        <% for (const post of posts) { %>
+                            <a href="/post/<%= post._id %>" class="posts">
+                                <% if (post.mediaType === 'image') { %>
+                                <figure class="posts-image">
+                                    <img src="data:image/<%= post.mediaType %>;base64,<%= post.mediaUrl %>" alt="Post Image">
+                                </figure>
+                                <% } else if (post.mediaType === 'video') { %>
+                                    <figure class="posts-image">
+                                        <i id="reelicon" class="ri-film-line"></i>
+                                        <video autoplay loop muted>
+                                            <source src="data:video/mp4;base64,<%= post.mediaUrl %>" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                          </video>
+                                    </figure>
+                                    <% } %> 
+                                <span class="posts-overlay">
+                                  <p>
+                                    <span class="post-likes"><i class="ri-heart-3-fill"></i><%=post.likes.length%></span>
+                                    <span class="post-comments"><i class="ri-chat-1-fill"></i><%=post.comments.length%></span>
+                                  </p>
+                                </span>
+                              </a>
+                        <% } %>
+                    <% } else { %>
+                        <p>You haven't created any posts yet.</p>
+                    <% } %>
+                    
+                  </section>
+               </div>
+            </div>
+            
+          
+          
+      
+
+
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"
+            integrity="sha512-WrdC3CE9vf1nBf58JHepuWT4x24uTacky9fuzw2g/3L9JkihgwZ6Cfv+JGTtNyosOhEmttMtEZ6H3qJWfI7gIQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            var dark = document.getElementById("clicked");
+            var white = document.getElementById("white-color");
+            var lol = document.getElementById("white-2color");
+            dark.onclick = function () {
+                document.body.classList.toggle("dark-mode");
+                if (document.body.classList.contains("dark-mode")) {
+                    white.style.filter = "brightness(5)";
+                    lol.style.filter = "brightness(5)";
+                }
+                else {
+                    white.style.filter = "none";
+                    lol.style.filter = "none";
+                }
+            }
+            </script>
+</body>
+</html>

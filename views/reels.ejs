@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram clone </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <style>
+        .reelscontainer{
+            /* background-color: pink; */
+            height: 95vh;
+            width: 27vw;
+            margin-top: 2.5em;
+            display: flex;
+            overflow: auto;
+            gap: 2em;
+            flex-direction: column;
+            scroll-snap-type: y mandatory;
+        }
+        .reelscontainer::-webkit-scrollbar{
+            display: none;
+        }
+        #main{
+            display: flex;
+            justify-content: center;
+            /* background-color: red; */
+        }
+        .reel{
+            min-height: 95vh;
+            min-width: 28vw;
+            background-color: rgb(229, 255, 0);
+            scroll-snap-align: start;
+            overflow: hidden;
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .reel video{
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+        }
+        .reel .imbox{
+            position: relative;
+            height: 100%;
+            width: 100%;
+            background-color: #FCFBFB;
+        }
+        .likebox{
+            position: absolute;
+            height: 60%;
+            width: 70px;
+            /* background-color: rgba(81, 81, 81, 0.155); */
+            z-index: 99;
+            bottom: 6%;
+            right: 6px;
+            /* display: none; */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            color: white;
+            /* mix-blend-mode: difference; */
+        }
+        .likebox i{
+            font-size: 30px;
+            color: white;
+        }
+        @media (max-width:600px) {
+            .reelscontainer{
+                height: 100vh;
+                width: 100%;
+                gap: 10px;
+            }
+            .reel{
+            height: 100vh;
+            width: 100%;
+        }
+        .reel .imbox{
+            height: 100%;
+            width: 100%;
+        }
+        }
+        .reelcmt{
+            position: fixed;
+            right: 6%;
+            height: 40vh;
+            width: 35vw;
+            background-color: #262626;
+            z-index: 999;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="createpost">
+            <form action="/create" method="post" enctype="multipart/form-data">
+                <textarea name="caption" id="" cols="30" rows="10" placeholder="Whats going on your mind"></textarea>
+                <input type="file" name="media" accept="image/*,video/*">
+                <button type="submit">Create Post</button>
+            </form>
+
+        </div>
+        <!-- starting nav section of instagram -->
+        <nav>
+            <div class="navbar">
+                <a href="/">
+                    <div class="instagram-text-logo">
+                        <img src="https://i.postimg.cc/qMFTcDw1/instagram-text.png" id="white-color" alt="">
+                    </div>
+                </a>
+                <div class="sub-section" id="clicked">
+                    <i class="fa-solid fa-house"></i>
+                    <a href="#">Dark-mode</a>
+                </div>
+                <div id="srch" class="sub-section">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                     <a>Search</a>
+                </div>
+                <div class="sub-section">
+                    <a style="color: black; display: flex;" href="/explore"><i class="fa-regular fa-compass"></i></a>
+                    <a href="/explore">Explore</a>
+                </div>
+                <div class="sub-section">
+                    <a style="color: black; display: flex;" href="/reels"><i class="fa-solid fa-clapperboard"></i></a>
+    
+                    <a href="/reels">Reels</a>
+                </div>
+                <div class="sub-section">
+    
+                    <a style="color: black; display: flex;" href="/chat"> <i class="fa-regular fa-message"></i></a>
+    
+                    <a href="/chat">Messages</a>
+                </div>
+                <div class="sub-section" id="hidden2">
+                    <i class="fa-regular fa-heart"></i>
+                    <a href="#">Notification</a>
+                </div>
+                <div id="createbtn" class="sub-section" id="hidden1">
+                    <i class="fa-solid fa-square-plus"></i>
+                    <a>Create</a>
+                </div>
+                <div class="sub-section">
+                    <a style="display: flex;" href="/profile/<%=loggedInUser.username%>">
+                        <div class="profile-img">
+                            <img src="data:image/png;base64,<%= loggedInUser.profilePic %>" alt="Profile Picture"
+                                class="profile-pic">
+                        </div>
+                    </a>
+                    <a href="/profile/<%=loggedInUser.username%>">Profile</a>
+                </div>
+                <div class="menu-section " id="hidden">
+                    <i class="fa-solid fa-bars"></i>
+                    <a href="#">More</a>
+                </div>
+            </div>
+    
+        </nav>
+        <div class="middle-section">
+            <div class="post-section">
+                <div class="nav-hidden">
+                    <div class="nav-hidden-logo" id="white-2color">
+                        <img src="https://i.postimg.cc/qMFTcDw1/instagram-text.png" alt="">
+                    </div>
+                    <div class="nav-hide-2">
+                        <i class="fa-regular fa-heart"></i>
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </div>
+                </div>
+                <div class="post-area">
+                  
+
+
+                        <div id="main">
+                            <div class="reelscontainer">
+                                <% for (const post of posts) { %>
+                                  <div class="reel">
+                                    <div class="imbox">
+                                        <video controls>
+                                            <source src="data:video/mp4;base64,<%= post.mediaUrl %>" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                          </video>
+                                      <div class="likebox">
+                                        <h2 style="margin-top: -5px;" class="like-button" data-post-id="<%= post._id %>">
+                                            <%= post.likes.includes(user._id) ? '❤️' : '🤍' %>
+                                        </h2>
+                                        <p style="margin-left: -5px; flex-shrink: 0;" class="like-count">Likes:<%=post.likes.length%></p>
+                                        <a href="/post/<%= post._id %>"><i class="ri-chat-3-line"></i>
+                                        </a>
+                                        <i class="ri-share-forward-fill"></i>
+                                        <button style="border: none; background-color: transparent;"
+                                                class="save-button" data-post-id="<%= post._id %>">
+                                                <% if (post.savedBy.includes(user._id)) { %>
+                                                    <!-- Show different icon if post is saved by the user -->
+                                                    <i class="ri-bookmark-fill"></i>
+                                                    <% } else { %>
+                                                        <i class="ri-bookmark-line"></i>
+                                                        <% } %>
+                                            </button>
+                                      </div>
+                                      <div class="reeluser">
+                                        <div class="reelpro">
+                                            <a href="/profile/<%=post.user.username%>"></a>
+                                            <div class="reelimg">
+                             <img src="data:image/png;base64,<%= post.user.profilePic %>" alt="Profile Picture" class="profile-pic">
+                                            </div>
+                                        </a>
+                                            <a href="/profile/<%=post.user.username%>">
+                                                <h4><%=post.user.username%></h4>
+                                            </a>
+                                        </div>
+                                        <p><%=post.caption%></p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                <% } %>
+                              </div>
+                              
+                           </div>
+
+
+                       
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js" integrity="sha512-WrdC3CE9vf1nBf58JHepuWT4x24uTacky9fuzw2g/3L9JkihgwZ6Cfv+JGTtNyosOhEmttMtEZ6H3qJWfI7gIQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var dark = document.getElementById("clicked");
+        var white = document.getElementById("white-color");
+        var lol = document.getElementById("white-2color");
+        dark.onclick = function () {
+            document.body.classList.toggle("dark-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                white.style.filter = "brightness(5)";
+                lol.style.filter = "brightness(5)";
+            }
+            else {
+                white.style.filter = "none";
+                lol.style.filter = "none";
+            }
+        }
+
+        let flag = false;
+
+document.querySelector("#createbtn").addEventListener("click", function() {
+    const createpost = document.querySelector(".createpost");
+    flag = !flag;
+
+    if (flag) {
+        createpost.style.scale = 1;
+        console.log("click")
+    } else {
+        createpost.style.scale = 0;
+    }
+});
+document.addEventListener('DOMContentLoaded', () => {
+             const reels = document.querySelectorAll('.reel video');
+             let currentlyPlaying = null;
+ 
+             const observer = new IntersectionObserver(entries => {
+                 entries.forEach(entry => {
+                     if (entry.isIntersecting) {
+                         const video = entry.target;
+                         const reel = entry.target.parentElement.parentElement;
+                         
+                         if (currentlyPlaying && currentlyPlaying !== video) {
+                             currentlyPlaying.pause();
+                         }
+                         
+                         if (reel.style.transform !== 'translateY(0)') {
+                             video.play();
+                             currentlyPlaying = video;
+                         }
+                     } else {
+                         entry.target.pause();
+                     }
+                 });
+             }, { threshold: 0.9 });
+ 
+             reels.forEach(reel => {
+                 observer.observe(reel);
+             });
+         });
+
+         document.addEventListener('DOMContentLoaded', () => {
+    const likeButtons = document.querySelectorAll('.like-button');
+    
+    likeButtons.forEach(likeButton => {
+        likeButton.addEventListener('click', async () => {
+            const postId = likeButton.dataset.postId;
+            const response = await fetch('/like', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ postId }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                likeButton.textContent = data.liked ? '❤️' : '🤍';
+                const likeCountElement = likeButton.nextElementSibling;
+                likeCountElement.textContent = `Likes: ${data.likeCount}`;
+            }
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+            const saveButtons = document.querySelectorAll('.save-button');
+
+            saveButtons.forEach(saveButton => {
+                saveButton.addEventListener('click', async () => {
+                    const postId = saveButton.dataset.postId;
+
+                    try {
+                        const response = await fetch(`/save-post/${postId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.success) {
+                                // Toggle the save icon based on the response
+                                saveButton.innerHTML = data.isSaved
+                                    ? '<i class="ri-bookmark-fill"></i>'
+                                    : '<i class="ri-bookmark-line"></i>';
+                            }
+                        } else {
+                            console.error('Error saving post:', response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Error saving post:', error);
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+
+</html>

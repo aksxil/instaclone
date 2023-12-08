@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html,body{
+            height: 100%;
+            width: 100%;
+        }
+        .openpost{
+  height: 100vh;
+  width: 100vw;
+  
+  background-color: black;
+  display: flex;
+  /* display: none; */
+  /* border: 1px solid red; */
+  z-index: 99999;
+}
+.openpost .left{
+  height: 100%;
+  width: 50%;
+  background-color: rgb(24, 24, 24);
+  overflow: hidden;
+}
+.openpost .left img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.openpost .left video{
+  height: 100%;
+  /* width: 100%; */
+  /* object-fit: cover; */
+}
+@media (max-width:600px) {
+    .openpost{
+        flex-direction: column;
+    }
+    .openpost .left{
+        width: 100%;
+        height: 50vh;
+    }
+    .openpost .right{
+        width: 100%;
+        height: 50vh;
+    }
+}
+    </style>
+</head>
+<body>
+    <!-- postDetails.ejs -->
+
+
+<% if (post) { %>
+    <div class="openpost">
+        <div class="left">
+          <% if (post.mediaType==='image' ) { %>
+            <div class="opnpostcon">
+              <img src="data:image/<%= post.mediaType %>;base64,<%= post.mediaUrl %>" alt="Post Media">
+            </div>
+            <% } else if (post.mediaType==='video' ) { %>
+              <div class="opnpostconvideo">
+                <video autoplay loop muted controls>
+                  <source src="data:video/mp4;base64,<%= post.mediaUrl %>" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+              <% } %>
+        </div>
+        <div class="right">
+          <div class="postown">
+            <a style="color: white;" href="/profile/<%=post.user.username%>">
+                <div class="ownimg">
+                    <div class="ownimgbox">
+                      <img src="data:image/png;base64,<%= post.user.profilePic %>" alt="Profile Picture">
+                    </div>
+                    <h2>
+                      <%= post.user.username %>
+                    </h2>
+            
+                  </div>
+            </a>
+            <div class="caption">
+              <p><%=post.caption%></p>
+            </div>
+            <i onclick="goBack()" id="cmtcls" class="ri-close-fill"></i>
+          </div>
+          <div class="comments-section" data-post-id="<%= post._id %>">
+
+            <h4>Comments:</h4>
+            <div class="comments-list">
+              <% for (const comment of post.comments) { %>
+                <div class="comtex" data-comment-id="<%= comment._id %>">
+                  <div class="comown">
+                    <img src="data:image/png;base64,<%= comment.user.profilePic %>" alt="Profile Picture">
+                  </div>
+                  <p>
+                    <strong><%= comment.user.username %>:</strong>
+                    <%= comment.text %>
+                  </p>
+                  <% if (comment.user._id.toString()===user._id.toString()) { %>
+                    <form action="/delete-comment" method="POST">
+                      <input type="hidden" name="commentId" value="<%= comment._id %>">
+                      <button style="background-color: white; color: black;" type="submit"><i style="color: black;"  class="ri-delete-bin-fill"></i></button>
+                      
+                    </form>
+                  <% } %>
+                </div>
+              <% } %>
+            </div>
+            <form class="comment-form">
+              <input type="hidden" name="postId" value="<%= post._id %>">
+              <input type="text" name="commentText" placeholder="Add a comment">
+              <button type="submit">Post</button>
+            </form>
+          </div>
+          <div class="likeb">
+            <h2 style="margin-top: -5px;" class="like-button" data-post-id="<%= post._id %>">
+                <%= post.likes.includes(user._id) ? '❤️' : '🤍' %>
+            </h2>
+            <h5 style="font-size: 20px; font-family: gilroy;" class="like-count">Likes: <%= parseInt(post.likes.length) %></h5>
+            <% if (loggedInUser && post.user._id.toString() === loggedInUser._id.toString()) { %>
+              <!-- Add a delete button for the post -->
+              <form method="post" action="/delete-post/<%= post._id %>">
+                <button type="submit">Delete Post</button>
+              </form>
+            <% } %>
+          </div>
+      
+        </div>
+      </div>
+<% } else { %>
+  <p>Post not found.</p>
+<% } %>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const likeButtons = document.querySelectorAll('.like-button');
+  
+      likeButtons.forEach(likeButton => {
+        likeButton.addEventListener('click', async () => {
+          const postId = likeButton.dataset.postId;
+          const response = await fetch('/like', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ postId }),
+          });
+  
+          if (response.ok) {
+            const data = await response.json();
+            likeButton.textContent = data.liked ? '❤️' : '🤍';
+            const likeCountElement = likeButton.nextElementSibling;
+            likeCountElement.textContent = `Likes: ${data.likeCount}`;
+          }
+        });
+      });
+    });
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      const commentForms = document.querySelectorAll('.comment-form');
+  
+      commentForms.forEach(form => {
+        form.addEventListener('submit', async (e) => {
+          // e.preventDefault();
+  
+          const formData = new FormData(form);
+          const postId = formData.get('postId');
+          const commentText = formData.get('commentText');
+  
+          try {
+            const response = await fetch('/add-comment', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ postId, commentText }),
+            });
+  
+            const data = await response.json();
+  
+            if (response.ok) {
+              const commentsList = form.previousElementSibling.querySelector('.comments-list');
+              const newCommentElement = document.createElement('div');
+              newCommentElement.classList.add('comtex');
+              newCommentElement.innerHTML = `
+                <div class="comown">
+                  <img src="data:image/png;base64,${data.user.profilePic}" alt="Profile Picture">
+                </div>
+                <p>
+                  <strong>${data.user.username}:</strong>
+                  ${data.text}
+                </p>
+              `;
+              commentsList.appendChild(newCommentElement);
+  
+              // Clear the input field after adding the comment
+              form.querySelector('input[name="commentText"]').value = '';
+            } else {
+              console.error('Error adding comment:', data.message);
+            }
+          } catch (error) {
+            console.error('Error adding comment:', error);
+          }
+        });
+      });
+    });
+    function goBack() {
+    window.history.back();
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const deleteButtons = document.querySelectorAll('.delete-comment');
+
+    deleteButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        const commentId = this.dataset.commentId;
+
+        // Make an AJAX request to delete the comment
+        fetch('/delete-comment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ commentId }),
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Comment deletion failed');
+            }
+          })
+          .then(data => {
+            // Remove the deleted comment from the UI
+            const commentElement = document.querySelector(`.comtex[data-comment-id="${commentId}"]`);
+            if (commentElement) {
+              commentElement.remove();
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      });
+    });
+  });
+  </script>
+  
+</body>
+</html>

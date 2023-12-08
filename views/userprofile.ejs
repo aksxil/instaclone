@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- views/profile.ejs -->
+
+<h1><%= profileUser.username %>'s Profile</h1>
+<img src="<%= profileUser.profilePic %>" alt="Profile Picture">
+<p>Full Name: <%= profileUser.fullName %></p>
+<p>Email: <%= profileUser.email %></p>
+<!-- Add more profile details as needed -->
+
+<h2>Posts</h2>
+<% for (const post of posts) { %>
+  <div class="post">
+    <!-- Display post details -->
+  </div>
+<% } %>
+
+</body>
+</html>

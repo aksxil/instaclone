@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background-color: #fafafa;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 30px;
+        }
+
+        /* header style */
+        .page .header {
+            text-align: center;
+        }
+
+        .page .header .logo,
+        .page .header p,
+        .page .header button {
+            margin-bottom: 15px;
+        }
+
+        .page .header>p {
+            font-weight: bold;
+            color: #8e8e8e;
+            font-size: 18px;
+        }
+
+        .page .header>button {
+            width: inherit;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #0095f6;
+            color: #ffffff;
+        }
+
+        .page .header div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: #8e8e8e;
+        }
+
+        .page .header div p {
+            padding: 0 20px;
+        }
+
+        .page .header div hr {
+            width: 200px;
+
+        }
+
+        /* container style*/
+        .page .container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page .container form,
+        input {
+            width: inherit;
+        }
+
+        .page .container form input {
+            border: 1px solid #dbdbdb;
+            background-color: #fafafa;
+            padding: 10px 5px;
+            margin: 5px 0;
+        }
+
+        .page .container form input:last-of-type {
+            margin-bottom: 10px;
+        }
+
+        .page .container form button {
+            width: inherit;
+            margin-bottom: 20px;
+            padding: 7px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #0095f6;
+            color: #ffffff;
+        }
+
+        .page .container ul {
+            list-style: none;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .page .container ul li {
+            display: inline;
+            color: #8e9096;
+        }
+
+        .page .container ul li a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #8e9096;
+        }
+
+        /* option style */
+        .option p>a {
+            text-decoration: none;
+            color: #00a0f7;
+        }
+
+        /* otherapps style */
+        .otherapps {
+            text-align: center;
+        }
+
+        .otherapps p {
+            margin-bottom: 15px;
+        }
+
+        .otherapps>button {
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: black;
+            color: white;
+            padding: 10px;
+            font-size: 18px;
+        }
+
+        /* footer style */
+        .footer {
+            bottom: 0;
+            height: 2.5rem;
+            margin-top: 50px;
+        }
+
+        .footer ul {
+            text-align: center;
+        }
+
+        .footer ul li {
+            display: inline;
+            margin-right: 5px;
+        }
+
+        .footer ul li a {
+            text-decoration: none;
+            font-size: 12px;
+            color: #00376b;
+        }
+
+        .footer p {
+            margin: 10px 0;
+            text-align: center;
+            color: #8e9096;
+            font-size: 14px;
+        }
+
+
+
+        /* Mobile Styles */
+
+        @media only screen and (max-width: 400px) {
+            body {
+                font-family: Freight Sans
+            }
+
+            .page {
+                width: 300px;
+                background-color: #fafafa;
+            }
+
+            .page .header {
+                width: inherit;
+                margin-top: 10px;
+            }
+
+            .page .container {
+                width: inherit;
+            }
+
+            .option {
+                margin: 80px 0;
+            }
+
+            .page .container input {
+                padding: 10px 5px;
+                margin: 5px 0;
+            }
+
+            .page .footer {
+                width: inherith
+            }
+        }
+
+        @media only screen and (min-width: 401px) {
+            body {
+                font-family: Neue Helvetica
+            }
+
+            .page {
+                border: 1px solid #dbdbdb;
+                width: 350px;
+                background-color: white;
+                margin: 40px 40px 10px 40px;
+            }
+
+            .page .header {
+                width: 270px;
+                margin-top: 15px;
+            }
+
+            .page .container {
+                width: 270px;
+            }
+
+            .option {
+                border: 1px solid #dbdbdb;
+                background-color: white;
+                width: 350px;
+                height: 70px;
+                margin-top: 20px 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+            }
+
+            .otherapps {
+                margin: 20px 0;
+            }
+
+            .otherapps button {
+                margin-right: 5px;
+            }
+
+            .otherapps button:after-of-type {
+                margin-right: none;
+            }
+
+            .page .footer {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <div class="page">
+            <div class="header">
+                <h1 class="logo">Instagram</h1>
+                <p>Sign up to see photos and videos from your friends.</p>
+                <button><i class="fab fa-facebook-square"></i> Log in with Facebook</button>
+                <div>
+                    <hr>
+                    <p>OR</p>
+                    <hr>
+                </div>
+            </div>
+            <div class="container">
+                <form action="/register" method="post" id="registrationForm">
+                    <input type="text" name="email" placeholder="Email">
+                    <input type="text" name="fullName" placeholder="Full Name">
+                    <input type="text" id="username" name="username" placeholder="Username">
+                    <span id="usernameAvailability"></span>
+                    <input type="password" required=true name="password" placeholder="Password">
+                    <button id="sub" type="submit">Sign up</button>
+                </form>
+
+                <ul>
+                    <li>By signing up, you agree to our</li>
+                    <li><a href="">Terms</a></li>
+                    <li><a href="">Data Policy</a></li>
+                    <li>and</li>
+                    <li><a href="">Cookies Policy</a> .</li>
+                </ul>
+            </div>
+        </div>
+        <div class="option">
+            <p>Have an account? <a href="/login">Log in</a></p>
+        </div>
+        <div class="otherapps">
+            <p>Get the app.</p>
+            <button type="button"><i class="fab fa-apple"></i> App Store</button>
+            <button type="button"><i class="fab fa-google-play"></i> Google Play</button>
+        </div>
+
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.0/axios.min.js" integrity="sha512-aoTNnqZcT8B4AmeCFmiSnDlc4Nj/KPaZyB5G7JnOnUEkdNpCZs1LCankiYi01sLTyWy+m2P+W4XM+BuQ3Q4/Dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+
+var username = document.querySelector("#username")
+
+username.addEventListener("input",function(){
+ if(username.value.length > 0){
+   axios.get(`/check/${username.value}`)
+   .then(function(data){
+     if(data.data){
+       console.log("data mila")
+       username.style.boxShadow = "0 0 0 0.25rem rgba(255,50,50,.7)";
+       username.style.outlineColor ="red"
+       document.querySelector('#sub').setAttribute("disabled", true);
+     }
+     else{
+       username.style.boxShadow = "0 0 0 0.25rem rgba(13,110,253,.25)";
+       username.style.outlineColor ="green"
+       document.querySelector('#sub').removeAttribute("disabled");
+     }
+   })
+ }
+})
+    </script>
+
+</body>
+
+</html>

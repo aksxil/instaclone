@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password</title>
+   <link rel="stylesheet" href="stylesheets/style.css">
+   <style>
+    *{
+  margin: 0;
+  padding: 0;
+}
+html,body{
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #333333;
+}
+#main{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+  background-color: #333333;
+}
+#main form{
+  height: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+form input{
+ padding: 15px 30px;
+ font-family: gilroy;
+ font-weight: 600;
+ border-radius: 5px;
+ margin: 5px;
+ display: flex;
+ justify-content: center;
+}
+
+#main h1{
+  font-size: 30px;
+  padding: 20px;
+  font-family: voyage;
+  color: white;
+}
+#sub{
+  background-color: #45f3ff;
+  font-family: voyage;
+  font-size: 3vh;
+}
+#sub:hover{
+  background-color: #d3fcff;
+}
+   </style>
+</head>
+<body>
+  <div id="main">
+    <h1>Reset Password</h1>
+    <form action="/reset/<%= userId %>/<%= key %>" method="post">
+        <input type="password" id="newPassword" name="password" required placeholder="Enter New Password">
+        <input type="password" id="newPassword" name="confirmPassword" required placeholder="Confirm New Password">
+        <br>
+
+        <input type="submit" name="" id="">
+    </form>
+  </div>
+</body>
+</html>

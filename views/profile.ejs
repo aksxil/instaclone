@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instagram clone </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/profile.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+
+</head>
+<body>
+    <div class="searchbox">
+        <h3>Search</h3>
+        <input type="text" id="searchInput" placeholder="Search for users...">
+        <div id="searchResults"></div>
+
+
+    </div>
+<div class="container">
+        <!-- starting nav section of instagram -->
+        <nav>
+          <div class="navbar">
+              <a href="/">
+                  <div class="instagram-text-logo">
+                      <img src="https://i.postimg.cc/qMFTcDw1/instagram-text.png" id="white-color" alt="">
+                  </div>
+              </a>
+              <div class="sub-section" id="clicked">
+                  <i class="fa-solid fa-house"></i>
+                  <a href="#">Dark-mode</a>
+              </div>
+              <div id="srch" class="sub-section">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <a>Search</a>
+              </div>
+              <div class="sub-section">
+                  <a style="color: black; display: flex;" href="/explore"><i class="fa-regular fa-compass"></i></a>
+                  <a href="/explore">Explore</a>
+              </div>
+              <div class="sub-section">
+                  <a style="color: black; display: flex;" href="/reels"><i class="fa-solid fa-clapperboard"></i></a>
+
+                  <a href="/reels">Reels</a>
+              </div>
+              <div class="sub-section">
+
+                  <a style="color: black; display: flex;" href="/chat"> <i class="fa-regular fa-message"></i></a>
+
+                  <a href="/chat">Messages</a>
+              </div>
+              <div class="sub-section" id="hidden2">
+                  <i class="fa-regular fa-heart"></i>
+                  <a href="#">Notification</a>
+              </div>
+              <div id="createbtn" class="sub-section" id="hidden1">
+                  <i class="fa-solid fa-square-plus"></i>
+                  <a>Create</a>
+              </div>
+              <div class="sub-section">
+                  <a style="display: flex;" href="/profile/<%=user.username%>">
+                      <div class="profile-img">
+                          <img src="data:image/png;base64,<%= user.profilePic %>" alt="Profile Picture"
+                              class="profile-pic">
+                      </div>
+                  </a>
+                  <a href="/profile/<%=user.username%>">Profile</a>
+              </div>
+              <div class="menu-section " id="hidden">
+                  <i class="fa-solid fa-bars"></i>
+                  <a href="#">More</a>
+              </div>
+          </div>
+
+      </nav>
+        <div class="middle-section">
+          <div class="box">
+            <div class="imgbox">
+                <img src="data:image/png;base64,<%= user.profilePic %>" >
+            </div>
+            <div class="prodet">
+                <div class="edit">
+                    <h3><%=user.username%></h3>
+                    <% if (isOwnProfile) { %>
+                        <a href="/edit"> <button>Edit profile</button></a>
+                        <i class="ri-settings-4-fill"></i>
+                      <% } else { %>
+                        <form id="followForm" action="/follow/<%= user._id %>" method="POST">
+                            <button type="submit" style="cursor: pointer;">
+                              <%= isFollowing ? 'Unfollow' : 'Follow' %>
+                            </button>
+                          </form>
+                          <a href="/chat" style="cursor: pointer;">
+                            <button style="cursor: pointer;">
+                              Message
+                            </button>
+                          </a>
+                      <% } %>
+
+                      
+
+
+                   
+                    
+                </div>
+                <div class="followers">
+                    <h5><strong><%=posts.length%></strong> posts</h5>
+                    <h5><strong><%=user.following.length%></strong> <a style="font-size: 20px;" href="/following/<%=user._id%>">following</a></h5>
+                    <h5><strong><%=user.followers.length%></strong> <a style="font-size: 20px;" href="/followers/<%=user._id%>">followers</a></h5>
+                </div>
+                <h1><%=user.fullName%></h1>
+                <p>Bio:<%=user.bio%></p>
+            </div>
+          </div>
+          
+            <div class="mainbox">
+                <!-- <div class="story-section">
+                    <div class="story">
+                        <div class="story-image">
+                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZSUyMGltYWdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60" alt="">
+                        </div>
+                        <span>Aaradhya_gu.</span>
+                    </div>
+                    <div class="story">
+                        <div class="story-image">
+                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZSUyMGltYWdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60" alt="">
+                        </div>
+                        <span>Adah_paret..</span>
+                    </div>
+                    <div class="story" id="story-2">
+                        <div class="story-image">
+                            <img src="https://images.unsplash.com/photo-1517702145080-e4a4d91435bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHByb2ZpbGUlMjBpbWFnZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=600&q=60" alt="">
+                        </div>
+                        <span>Adhira_boi..</span>
+                    </div>
+                    <div class="story" id="story-3">
+                        <div class="story-image"  >
+                            <img src="https://media.istockphoto.com/id/1418475387/photo/robotic-hand-pressing-a-keyboard-on-a-laptop-3d-rendering.webp?b=1&s=612x612&w=0&k=20&c=bqtiTjtbsN85HMdO40gidWq6uE4BW1-RGlUOkSfEgoI=" alt="">
+                        </div>
+                        <span>Anika@189</span>
+                    </div>
+                    <div class="story" id="story-4">
+                        <div class="story-image">
+                            <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cHJvZmlsZSUyMGltYWdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60" alt="">
+                        </div>
+                        <span>Kashvi_tut</span>
+                    </div>
+                    <div class="story" id="story-5">
+                        <div class="story-image">
+                            <img src="https://images.unsplash.com/photo-1558203728-00f45181dd84?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8cHJvZmlsZSUyMGltYWdlfGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60" alt="">
+                        </div>
+                        <span>Rebecca.io</span>
+                    </div>
+                    <div class="story" id="story-6">
+                        <div class="story-image">
+                            <img src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cGVyc29ufGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60" alt="">
+                        </div>
+                        <span>Sahana_pie.</span>
+                    </div>
+                    <div class="story" id="story-7">
+                        <div class="story-image">
+                            <img src="https://plus.unsplash.com/premium_photo-1664453546896-ad5e0f895eab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGVyc29ufGVufDB8fDB8fHww&auto=format&fit=crop&w=600&q=60" alt="">
+                        </div>
+                        <span>Zara_comp</span>
+                    </div>
+                </div> -->
+                <div class="menuu">
+                  <button id="postBtn"><i class="ri-grid-fill"></i>POSTS</button>
+                  <!-- <button><i class="ri-film-line"></i>REELS</button> -->
+                  <% if (isOwnProfile) { %>
+                  <button id="savePostBtn"><i class="ri-bookmark-fill"></i>SAVED</button>
+                  <% } %>
+                  <!-- <button><i class="ri-at-line"></i>TAGGED</button> -->
+                </div>
+               <div id="postid" class="postdiv">
+                <section class="posts-list">
+                    <% if (posts.length > 0) { %>
+                        <% for (const post of posts) { %>
+                            <a href="/post/<%= post._id %>" class="posts">
+                                <% if (post.mediaType === 'image') { %>
+                                <figure class="posts-image">
+                                    <img src="data:image/<%= post.mediaType %>;base64,<%= post.mediaUrl %>" alt="Post Image">
+                                </figure>
+                                <% } else if (post.mediaType === 'video') { %>
+                                    <figure class="posts-image">
+                                        <i id="reelicon" class="ri-film-line"></i>
+                                        <video autoplay loop muted>
+                                            <source src="data:video/mp4;base64,<%= post.mediaUrl %>" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                          </video>
+                                    </figure>
+                                    <% } %> 
+                                <span class="posts-overlay">
+                                  <p>
+                                    <span class="post-likes"><i class="ri-heart-3-fill"></i><%=post.likes.length%></span>
+                                    <span class="post-comments"><i class="ri-chat-1-fill"></i><%=post.comments.length%></span>
+                                  </p>
+                                </span>
+                              </a>
+                        <% } %>
+                    <% } else { %>
+                        <p>You haven't created any posts yet.</p>
+                    <% } %>
+                    
+                  </section>
+               </div>
+               <% if (isOwnProfile) { %>
+               <div id="postid" class="savedpost">
+                <section class="posts-list">
+                  <% if (savedPosts.length > 0) { %>
+                    <% for (const savedPost of savedPosts) { %>
+                      <a href="/post/<%= savedPost._id %>" class="posts">
+                        <% if (savedPost.mediaType === 'image') { %>
+                          <figure class="posts-image">
+                            <img src="data:image/<%= savedPost.mediaType %>;base64,<%= savedPost.mediaUrl %>" alt="Saved Post Image">
+                          </figure>
+                        <% } else if (savedPost.mediaType === 'video') { %>
+                          <figure class="posts-image">
+                            <i id="reelicon" class="ri-film-line"></i>
+                            <video autoplay loop muted>
+                              <source src="data:video/mp4;base64,<%= savedPost.mediaUrl %>" type="video/mp4">
+                              Your browser does not support the video tag.
+                            </video>
+                          </figure>
+                        <% } %> 
+                        <span class="posts-overlay">
+                          <p>
+                            <span class="post-likes"><i class="ri-heart-3-fill"></i><%=savedPost.likes.length%></span>
+                            <span class="post-comments"><i class="ri-chat-1-fill"></i><%=savedPost.comments.length%></span>
+                          </p>
+                        </span>
+                      </a>
+                    <% } %>
+                  <% } else { %>
+                    <p>No saved posts yet.</p>
+                  <% } %>
+                </section>
+              </div>
+              <% } %>
+            </div>
+            
+          
+          
+      </div>
+      
+     
+      
+
+</div>
+    <!-- <script src="script.js"></script> -->
+    <script>
+      var dark = document.getElementById("clicked");
+var white = document.getElementById("white-color");
+var lol = document.getElementById("white-2color");
+dark.onclick = function (){
+    document.body.classList.toggle("dark-mode");
+    if(document.body.classList.contains("dark-mode")){
+        white.style.filter = "brightness(5)";
+        lol.style.filter = "brightness(5)";
+    }
+    else{
+        white.style.filter = "none";
+        lol.style.filter = "none";
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const followForm = document.getElementById('followForm');
+
+  followForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const url = followForm.action;
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        const followButton = followForm.querySelector('button');
+        followButton.textContent = data.isFollowing ? 'Unfollow' : 'Follow';
+      } else {
+        console.error('Error toggling follow:', data.message);
+      }
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+    }
+  });
+});
+
+document.querySelector("#srch").addEventListener("click", function () {
+            var searchbox = document.querySelector(".searchbox");
+            var currentLeft = parseInt(getComputedStyle(searchbox).left, 10);
+
+            if (window.innerWidth <= 600) {
+                if (currentLeft === 0) {
+                    searchbox.style.left = "-100%";
+                } else {
+                    searchbox.style.left = "0";
+                }
+            } else {
+                if (searchbox.classList.contains("moved")) {
+                    searchbox.style.left = "20%";
+                    searchbox.classList.remove("moved");
+                } else {
+                    searchbox.style.left = "-20%";
+                    searchbox.classList.add("moved");
+                }
+            }
+        });
+
+
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+
+            searchInput.addEventListener('input', async () => {
+                const query = searchInput.value.trim();
+
+                if (query !== '') {
+                    const response = await fetch(`/search?query=${query}`);
+                    const data = await response.json();
+
+                    if (data.length > 0) {
+                        searchResults.innerHTML = '';
+                        data.forEach(user => {
+                            const userElement = document.createElement('div');
+                            userElement.id = 'searchid';
+                            userElement.innerHTML = `
+    
+    <a href="/profile/${user.username}"> <div class="simg">
+        <img src="data:image/png;base64,${user.profilePic}" >
+     </div>
+     <div class="serdet">
+        <h3>${user.username}</h3>
+        <h5>${user.fullName}</h5>
+     
+    </div></a>`;
+
+
+
+                            searchResults.appendChild(userElement);
+                        });
+                    } else {
+                        searchResults.innerHTML = 'No results found';
+                    }
+                } else {
+                    searchResults.innerHTML = '';
+                }
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+    const savePostBtn = document.getElementById('savePostBtn');
+    const savePostDiv = document.querySelector('.savedpost');
+    const postDiv = document.querySelector(".postdiv")
+    const postBtn = document.getElementById('postBtn');
+
+    // Initial state: hide the savepost div and show the post div
+    savePostDiv.style.display = 'none';
+    postDiv.style.display = 'block';
+
+    // Event listener for the Save Post button
+    savePostBtn.addEventListener('click', () => {
+      // Hide the post div
+      postDiv.style.display = 'none';
+      // Show the savepost div
+      savePostDiv.style.display = 'block';
+    });
+
+    // Event listener for the Post button
+    postBtn.addEventListener('click', () => {
+      // Hide the savepost div
+      savePostDiv.style.display = 'none';
+      // Show the post div
+      postDiv.style.display = 'block';
+    });
+  });
+    </script>
+</body>
+</html>

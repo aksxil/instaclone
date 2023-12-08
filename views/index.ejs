@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sasta Instagram❤️</title>
+    <link rel="icon" type="image/x-icon" href="/images/big.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <style>
+        html::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        html::-webkit-scrollbar-track {
+            background: rgb(133, 133, 133);
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        html::-webkit-scrollbar-thumb {
+            background: rgb(0, 60, 255);
+            border-radius: 20px;
+        }
+
+        .addstr {
+            height: 60px;
+            width: 60px;
+            background-color: rgb(131, 131, 131);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            margin: 0 20px;
+            margin-top: -20px;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .addstr i {
+            font-size: 30px;
+        }
+
+        .addstr h4 {
+            font-size: 13px;
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="searchbox">
+        <h3>Search</h3>
+        <input type="text" id="searchInput" placeholder="Search for users...">
+        <div id="searchResults"></div>
+
+
+    </div>
+    <div class="container">
+
+        <div class="createpost">
+            <form action="/create" method="post" enctype="multipart/form-data">
+                <textarea name="caption" id="" cols="30" rows="10" placeholder="Whats going on your mind"></textarea>
+                <input type="file" name="media" accept="image/*,video/*">
+                <button type="submit">Create Post</button>
+            </form>
+
+        </div>
+        <!-- starting nav section of instagram -->
+        <nav>
+            <div class="navbar">
+                <a href="/">
+                    <div class="instagram-text-logo">
+                        <img src="https://i.postimg.cc/qMFTcDw1/instagram-text.png" id="white-color" alt="">
+                    </div>
+                </a>
+                <div class="sub-section" id="clicked">
+                    <i class="fa-solid fa-house"></i>
+                    <a href="#">Dark-mode</a>
+                </div>
+                <div id="srch" class="sub-section">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <a>Search</a>
+                </div>
+                <div class="sub-section">
+                    <a style="color: black; display: flex;" href="/explore"><i class="fa-regular fa-compass"></i></a>
+                    <a href="/explore">Explore</a>
+                </div>
+                <div class="sub-section">
+                    <a style="color: black; display: flex;" href="/reels"><i class="fa-solid fa-clapperboard"></i></a>
+
+                    <a href="/reels">Reels</a>
+                </div>
+                <div class="sub-section">
+
+                    <a style="color: black; display: flex;" href="/chat"> <i class="fa-regular fa-message"></i></a>
+
+                    <a href="/chat">Messages</a>
+                </div>
+                <div class="sub-section" id="hidden2">
+                    <i class="fa-regular fa-heart"></i>
+                    <a href="#">Notification</a>
+                </div>
+                <div id="createbtn" class="sub-section" id="hidden1">
+                    <i class="fa-solid fa-square-plus"></i>
+                    <a>Create</a>
+                </div>
+                <div class="sub-section">
+                    <a style="display: flex;" href="/profile/<%=user.username%>">
+                        <div class="profile-img">
+                            <img src="data:image/png;base64,<%= user.profilePic %>" alt="Profile Picture"
+                                class="profile-pic">
+                        </div>
+                    </a>
+                    <a href="/profile/<%=user.username%>">Profile</a>
+                </div>
+                <div class="menu-section " id="hidden">
+                    <i class="fa-solid fa-bars"></i>
+                    <a href="#">More</a>
+                </div>
+            </div>
+
+        </nav>
+        <div class="middle-section">
+            <div class="post-section">
+                <div class="nav-hidden">
+                    <div class="nav-hidden-logo" id="white-2color">
+                        <img src="https://i.postimg.cc/qMFTcDw1/instagram-text.png" alt="">
+                    </div>
+                    <div class="nav-hide-2">
+                        <i class="fa-regular fa-heart"></i>
+                        <i class="fa-regular fa-paper-plane"></i>
+                    </div>
+                </div>
+                <div class="story-section">
+                    <div class="addstr" id="addStoryButton">
+                        <h4>Add-Story</h4>
+                        <i class="ri-add-box-fill"></i>
+                    </div>
+
+
+
+                    <!-- Display links for users with stories -->
+                    <% const uniqueUsers=new Set(); %>
+
+                        <!-- Include the logged-in user's story link -->
+                        <a style="margin-left: -20px;" href="/user/<%= user._id %>/stories" style="color: blue;">
+                            <div class="story" id="story-<%= user._id %>">
+                                <div class="story-image">
+                                    <img style="object-fit: cover;" src="data:image/png;base64,<%= user.profilePic %>"
+                                        alt="Profile Picture">
+                                </div>
+                                <span>
+                                    (Your Stories❤️)
+                                </span>
+                            </div>
+                        </a>
+                        <br>
+
+                        <!-- Loop through other users with stories -->
+                        <% stories.forEach(story=> { %>
+                            <% const storyUser=story.user; %>
+
+                                <!-- Check if the user is not already processed -->
+                                <% if (!uniqueUsers.has(String(storyUser._id))) { %>
+                                    <% uniqueUsers.add(String(storyUser._id)); %>
+
+                                        <!-- Your link code here -->
+                                        <a href="/user/<%= storyUser._id %>/stories" style="color: blue;">
+                                            <div class="story" id="story-<%= storyUser._id %>">
+                                                <div class="story-image">
+                                                    <img style="object-fit: cover;"
+                                                        src="data:image/png;base64,<%= storyUser.profilePic %>"
+                                                        alt="Profile Picture">
+                                                </div>
+                                                <span>
+                                                    <%= storyUser.username %>
+                                                </span>
+                                            </div>
+                                        </a>
+                                        <br>
+                                        <% } %>
+                                            <% }) %>
+
+                </div>
+                <div class="post-area">
+
+                    <form style="display: none;" id="storyForm" action="/add-story" method="POST"
+                        enctype="multipart/form-data">
+                        <!-- Input field for choosing a file -->
+                        <label for="media">Choose Media File:</label>
+                        <input type="file" name="media" id="media" accept="image/*,video/*" required>
+
+                        <!-- Hidden field for media type -->
+                        <input type="hidden" name="mediaType" id="mediaType" value="image">
+
+                        <button type="submit">Upload Story</button>
+                    </form>
+
+                    <% for (const post of posts) { %>
+                        <div class="post-main">
+                            <div class="openpost">
+                                <div class="left">
+                                    <% if (post.mediaType==='image' ) { %>
+                                        <div class="opnpostcon">
+                                            <img src="data:image/<%= post.mediaType %>;base64,<%= post.mediaUrl %>"
+                                                alt="Post Media">
+                                        </div>
+                                        <% } else if (post.mediaType==='video' ) { %>
+                                            <div class="opnpostconvideo">
+                                                <video autoplay loop muted controls>
+                                                    <source src="data:video/mp4;base64,<%= post.mediaUrl %>"
+                                                        type="video/mp4">
+                                                    Your browser does not support the video
+                                                    tag.
+                                                </video>
+                                            </div>
+                                            <% } %>
+                                </div>
+                                <div class="right">
+                                    <div class="postown">
+                                        <div class="ownimg">
+                                            <div class="ownimgbox">
+                                                <img src="data:image/png;base64,<%= post.user.profilePic %>"
+                                                    alt="Profile Picture">
+                                            </div>
+                                            <h2>
+                                                <%= post.user.username %>
+                                            </h2>
+
+                                        </div>
+                                        <i id="cmtcls" class="ri-close-fill"></i>
+                                    </div>
+                                    <div class="comments-section" data-post-id="<%= post._id %>">
+                                        <h4>Comments:</h4>
+                                        <div class="comments-list">
+                                            <% for (const comment of post.comments) { %>
+                                                <div class="comtex">
+                                                    <div class="comown">
+                                                        <img src="data:image/png;base64,<%= comment.user.profilePic %>"
+                                                            alt="Profile Picture">
+                                                    </div>
+                                                    <p> <strong>
+                                                            <%= comment.user.username %>:
+                                                        </strong>
+                                                        <%= comment.text %>
+                                                    </p>
+                                                    <% if (comment.user._id.toString()===user._id.toString()) { %>
+                                                        <form action="/delete-comment" method="POST">
+                                                            <input type="hidden" name="commentId"
+                                                                value="<%= comment._id %>">
+                                                            <button type="submit"><i
+                                                                    class="ri-delete-bin-fill"></i></button>
+                                                        </form>
+                                                        <% } %>
+                                                </div>
+                                                <% } %>
+                                        </div>
+                                        <form class="comment-form">
+                                            <input type="hidden" name="postId" value="<%= post._id %>">
+                                            <input type="text" name="commentText" placeholder="Add a comment">
+                                            <button type="submit">Submit</button>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="post-header">
+                                <div class="post-left-header">
+                                    <div class="post-image">
+                                        <img src="data:image/png;base64,<%= post.user.profilePic %>"
+                                            alt="Profile Picture">
+                                    </div>
+                                    <p class="post-username">
+                                        <a href="/profile/<%= post.user.username %>">
+                                            <%=post.user.username%>
+                                        </a>
+                                    </p>
+                                    <i class="fa-solid fa-certificate"></i>
+                                    <span class="one-day">
+                                        <%= post.createdAt.toLocaleString() %>
+                                    </span>
+                                </div>
+                                <i class="fa-solid fa-grip-lines"></i>
+                            </div>
+                            <% if (post.mediaType==='image' ) { %>
+                                <div class="post-main-image">
+                                    <img src="data:image/<%= post.mediaType %>;base64,<%= post.mediaUrl %>"
+                                        alt="Post Media">
+                                </div>
+                                <% } else if (post.mediaType==='video' ) { %>
+                                    <div class="post-main-image">
+                                        <video controls>
+                                            <source src="data:video/mp4;base64,<%= post.mediaUrl %>" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+
+                                    <% } %>
+                                    <div class="postlikes postlikes-<%= post._id %>" style="display: none;">
+                                        <p>Liked by:</p>
+                                        <% post.likes.forEach(function(user) { %>
+                                            <div class="profile-follow profile-foolow-hovering">
+                                                <div class="profile-follow-left">
+                                                    <div class="profile-follow-image">
+                                                        <img src="data:image/png;base64,<%= user.profilePic %>" alt="Profile Picture" class="profile-pic">
+                                                    </div>
+                                                    <div class="profile-follow-content">
+                                                        <a href="/profile/<%=user.username%>">
+                                                            <p class="profile-id">
+                                                                <%= user.username %>
+                                                            </p>
+                                                        </a>
+                                                        <a href="/profile/<%=user.username%>">
+                                                            <p class="profile-name">
+                                                                <%= user.fullName %>
+                                                            </p>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <% if (loggedInUser && user._id.toString() !== loggedInUser._id.toString()) { %>
+                                                    <div id="followButtons">
+                                                        <button style="background-color: transparent; border: none;" class="follow" data-user-id="<%= user._id %>">
+                                                            <%= loggedInUser.following.includes(user._id) ? 'Unfollow' : 'Follow' %>
+                                                        </button>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                        <% }); %>
+                                    </div>
+                                    
+                                    
+                                    
+                                    
+                                        <div class="post-fotter">
+                                            <div class="post-fotter-left">
+                                                <h2 style="margin-top: -5px;" class="like-button"
+                                                    data-post-id="<%= post._id %>">
+                                                    <% if (post.likes.some(like => like._id.equals(user._id))) { %>
+                                                        <!-- User has liked the post -->
+                                                        ❤️ <!-- Red heart emoji or your preferred representation for liking -->
+                                                      <% } else { %>
+                                                        <!-- User has not liked the post -->
+                                                        🤍 <!-- White heart emoji or your preferred representation for not liking -->
+                                                      <% } %>
+                                                </h2>
+                                                <h5 style="font-size: 20px; font-family: gilroy;" class="like-count showlikebtn" data-post-id="<%= post._id %>">
+                                                    Likes: <%= parseInt(post.likes.length) %>
+                                                </h5>
+
+                                                <a href="/post/<%= post._id %>">
+                                                    <i class="fa-regular fa-message"></i>
+                                                </a>
+
+
+                                                <i class="fa-regular fa-paper-plane"></i>
+                                            </div>
+                                            <!-- Save button -->
+                                            <button style="border: none; background-color: transparent;"
+                                                class="save-button" data-post-id="<%= post._id %>">
+                                                <% if (post.savedBy.includes(user._id)) { %>
+                                                    <!-- Show different icon if post is saved by the user -->
+                                                    <i class="ri-bookmark-fill"></i>
+                                                    <% } else { %>
+                                                        <i class="ri-bookmark-line"></i>
+                                                        <% } %>
+                                            </button>
+
+
+                                        </div>
+                                        <div class="post-description">
+                                            <p class="like-count" class="post-liked">Liked
+                                                by sarasshree
+                                                and others</p>
+                                            <p class="title"><span>
+                                                    <%= post.user.username %>
+                                                </span>
+                                                <%= post.caption %><br> more
+                                            </p>
+                                            <p class="comments"> view all comments</p>
+                                        </div>
+                        </div>
+                        <% } %>
+
+
+
+
+
+                </div>
+            </div>
+            <div class="follow-section">
+                <a href="/profile/<%=user.username%>">
+                    <div class="profile-follow profile-foolow-hovering">
+                        <div class="profile-follow-left">
+                            <div class="profile-follow-image">
+                                <img src="data:image/png;base64,<%= user.profilePic %>" alt="Profile Picture"
+                                    class="profile-pic">
+                            </div>
+                            <div class="profile-follow-content">
+                                <p class="profile-id">
+                                    <%=user.username%>
+                                </p>
+                                <p class="profile-name">
+                                    <%=user.fullName%>
+                                </p>
+                            </div>
+                        </div>
+                        <a href="#" class="follow">switch</a>
+                    </div>
+                </a>
+                <div class="suggestion-follow">
+                    <p class="suggestion">Suggested for you</p>
+                    <a href="#" class="see-all">see all</a>
+                </div>
+
+                <% for (const user of suggestedUsers) { %>
+                    <div class="profile-follow profile-foolow-hovering">
+                        <div class="profile-follow-left">
+                            <div class="profile-follow-image">
+                                <img src="data:image/png;base64,<%= user.profilePic %>" alt="Profile Picture"
+                                    class="profile-pic">
+                            </div>
+                            <div class="profile-follow-content">
+                                <a href="/profile/<%=user.username%>">
+                                    <p class="profile-id">
+                                        <%= user.username %>
+                                    </p>
+                                </a>
+                                <a href="/profile/<%=user.username%>">
+                                    <p class="profile-name">
+                                        <%= user.fullName %>
+                                    </p>
+                                </a>
+                            </div>
+                        </div>
+                        <button style="background-color: transparent; border: none;" class="follow"
+                            data-user-id="<%= user._id %>">
+                            <%= user.isFollowing ? 'Unfollow' : 'Follow' %>
+                        </button>
+                    </div>
+                    <% } %>
+
+                        <!-- <div class="profile-follow profile-foolow-hovering">
+                    <div class="profile-follow-left">
+                        <div class="profile-follow-image">
+                            <img src="https://cdn.pixabay.com/photo/2022/09/08/15/16/cute-7441224_640.jpg" alt="">
+                        </div>
+                        <div class="profile-follow-content">
+                            <p class="profile-id">ubey_lih</p>
+                            <p class="profile-name">Followed by shriiiiii_89_ + 2 more
+                            </p>
+                        </div>
+                    </div>
+                    <a href="#" class="follow">follow</a>
+                </div> -->
+
+
+
+                        <p class="copyrights"> Aksxill</p>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.0/axios.min.js"
+        integrity="sha512-WrdC3CE9vf1nBf58JHepuWT4x24uTacky9fuzw2g/3L9JkihgwZ6Cfv+JGTtNyosOhEmttMtEZ6H3qJWfI7gIQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var dark = document.getElementById("clicked");
+        var white = document.getElementById("white-color");
+        var lol = document.getElementById("white-2color");
+        dark.onclick = function () {
+            document.body.classList.toggle("dark-mode");
+            if (document.body.classList.contains("dark-mode")) {
+                white.style.filter = "brightness(5)";
+                lol.style.filter = "brightness(5)";
+            }
+            else {
+                white.style.filter = "none";
+                lol.style.filter = "none";
+            }
+        }
+
+        let flag = false;
+
+        document.querySelector("#createbtn").addEventListener("click", function () {
+            const createpost = document.querySelector(".createpost");
+            flag = !flag;
+
+            if (flag) {
+                createpost.style.scale = 1;
+                console.log("click")
+            } else {
+                createpost.style.scale = 0;
+            }
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const likeButtons = document.querySelectorAll('.like-button');
+
+            likeButtons.forEach(likeButton => {
+                likeButton.addEventListener('click', async () => {
+                    const postId = likeButton.dataset.postId;
+                    const response = await fetch('/like', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ postId }),
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        likeButton.textContent = data.liked ? '❤️' : '🤍';
+                        const likeCountElement = likeButton.nextElementSibling;
+                        likeCountElement.textContent = `Likes: ${data.likeCount}`;
+                    }
+                });
+            });
+        });
+
+
+        // Assuming you have a script.js file linked in your HTML
+
+        // Function to submit a comment
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const commentForms = document.querySelectorAll('.comment-form');
+
+            commentForms.forEach(form => {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const formData = new FormData(form);
+                    const postId = formData.get('postId');
+                    const commentText = formData.get('commentText');
+
+                    try {
+                        const response = await fetch('/add-comment', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ postId, commentText }),
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            const commentsList = form.previousElementSibling.querySelector('.comments-list');
+                            const newCommentElement = document.createElement('p');
+                            newCommentElement.innerHTML = `${data.username}: ${data.text}`;
+                            commentsList.appendChild(newCommentElement);
+                        } else {
+                            console.error('Error adding comment:', data.message);
+                        }
+                    } catch (error) {
+                        console.error('Error adding comment:', error);
+                    }
+                });
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add event listener for #cmtopn
+            document.querySelectorAll('#cmtopn').forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const openpost = e.target.closest('.post-main').querySelector('.openpost');
+                    openpost.style.display = 'flex';
+                });
+            });
+
+            // Add event listener for .cmtcls
+            document.querySelectorAll('#cmtcls').forEach((button) => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const openpost = e.target.closest('.post-main').querySelector('.openpost');
+                    openpost.style.display = 'none';
+                });
+            });
+        });
+
+        document.querySelector("#srch").addEventListener("click", function () {
+            var searchbox = document.querySelector(".searchbox");
+            var currentLeft = parseInt(getComputedStyle(searchbox).left, 10);
+
+            if (window.innerWidth <= 600) {
+                if (currentLeft === 0) {
+                    searchbox.style.left = "-100%";
+                } else {
+                    searchbox.style.left = "0";
+                }
+            } else {
+                if (searchbox.classList.contains("moved")) {
+                    searchbox.style.left = "20%";
+                    searchbox.classList.remove("moved");
+                } else {
+                    searchbox.style.left = "-20%";
+                    searchbox.classList.add("moved");
+                }
+            }
+        });
+
+
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('searchInput');
+            const searchResults = document.getElementById('searchResults');
+
+            searchInput.addEventListener('input', async () => {
+                const query = searchInput.value.trim();
+
+                if (query !== '') {
+                    const response = await fetch(`/search?query=${query}`);
+                    const data = await response.json();
+
+                    if (data.length > 0) {
+                        searchResults.innerHTML = '';
+                        data.forEach(user => {
+                            const userElement = document.createElement('div');
+                            userElement.id = 'searchid';
+                            userElement.innerHTML = `
+    
+                            <div class="profile-follow profile-foolow-hovering">
+          <div class="profile-follow-left">
+              <div class="profile-follow-image">
+                <img src="data:image/png;base64,${user.profilePic}" class="profile-pic">
+              </div>
+              <div class="profile-follow-content">
+                  <a href="/profile/${user.username}">
+                      <p class="profile-id">
+                        ${user.username}
+                      </p>
+                  </a>
+                  <a href="/profile/${user.username}">
+                      <p class="profile-name">
+                        ${user.fullName}
+                      </p>
+                  </a>
+              </div>
+          </div>
+          
+        </div>`;
+
+
+
+                            searchResults.appendChild(userElement);
+                        });
+                    } else {
+                        searchResults.innerHTML = 'No results found';
+                    }
+                } else {
+                    searchResults.innerHTML = '';
+                }
+            });
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const followButtons = document.querySelectorAll('.follow');
+
+            followButtons.forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    const userId = button.dataset.userId;
+
+                    try {
+                        const response = await fetch(`/follow/${userId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            button.textContent = data.isFollowing ? 'Unfollow' : 'Follow';
+                        } else {
+                            console.error('Error toggling follow:', data.message);
+                        }
+                    } catch (error) {
+                        console.error('Error toggling follow:', error);
+                    }
+                });
+            });
+        });
+
+
+        // Add an event listener to the file input field
+        document.getElementById('media').addEventListener('change', function () {
+            // Get the selected file
+            const fileInput = document.getElementById('media');
+            const selectedFile = fileInput.files[0];
+
+            // Get the file type (image or video)
+            const fileType = selectedFile.type.split('/')[0];
+
+            // Update the hidden mediaType field based on the file type
+            document.getElementById('mediaType').value = fileType;
+        });
+
+        // Get references to the button and form
+        const addButton = document.getElementById('addStoryButton');
+        const form = document.getElementById('storyForm');
+
+        // Add a click event listener to the button
+        addButton.addEventListener('click', () => {
+            // Trigger a click on the file input when the button is clicked
+            document.getElementById('media').click();
+        });
+
+        // Add a change event listener to the file input
+        document.getElementById('media').addEventListener('change', () => {
+            // Update the value of the hidden mediaType field based on the selected file
+            const fileType = document.getElementById('media').files[0].type.startsWith('image') ? 'image' : 'video';
+            document.getElementById('mediaType').value = fileType;
+
+            // Submit the form when the file input changes
+            form.submit();
+        });
+    </script>
+
+
+    <!-- Include the Socket.IO client library -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- Your client-side JavaScript code -->
+    <script>
+        var sender_id = '<%= loggedInUser._id %>';
+
+        // Establish a connection to the Socket.IO server
+        var socket = io();
+
+        // Emit the userConnected event and pass the sender_id
+        socket.on('connect', function () {
+            console.log('Connected to server');
+            socket.emit('userConnected', { userId: sender_id });
+        });
+
+        // Handle disconnect event
+        socket.on('disconnect', function () {
+            console.log('Disconnected from server');
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const saveButtons = document.querySelectorAll('.save-button');
+
+            saveButtons.forEach(saveButton => {
+                saveButton.addEventListener('click', async () => {
+                    const postId = saveButton.dataset.postId;
+
+                    try {
+                        const response = await fetch(`/save-post/${postId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        });
+
+                        if (response.ok) {
+                            const data = await response.json();
+                            if (data.success) {
+                                // Toggle the save icon based on the response
+                                saveButton.innerHTML = data.isSaved
+                                    ? '<i class="ri-bookmark-fill"></i>'
+                                    : '<i class="ri-bookmark-line"></i>';
+                            }
+                        } else {
+                            console.error('Error saving post:', response.statusText);
+                        }
+                    } catch (error) {
+                        console.error('Error saving post:', error);
+                    }
+                });
+            });
+        });
+
+
+        // for like view
+
+        $(document).ready(function () {
+        $(".showlikebtn").click(function () {
+            // Find the corresponding .postlikes div based on the post ID
+            var postId = $(this).data("post-id");
+            var postLikesDiv = $(".postlikes-" + postId);
+
+            // Toggle the display of the found postLikesDiv
+            postLikesDiv.toggle();
+        });
+    });
+    </script>
+
+</body>
+
+</html>

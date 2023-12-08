@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Password</title>
+   <link rel="stylesheet" href="stylesheets/style.css">
+   <style>
+    *{
+  margin: 0;
+  padding: 0;
+}
+html,body{
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #333333;
+}
+#main{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  flex-direction: column;
+  background-color: #ffffff;
+}
+#main form{
+  height: 200px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+form input{
+ padding: 15px 30px;
+ font-family: gilroy;
+ font-weight: 600;
+ border-radius: 5px;
+ margin: 5px;
+ display: flex;
+ justify-content: center;
+}
+
+#main h1{
+  font-size: 30px;
+  padding: 20px;
+  font-family: voyage;
+  color: rgb(43, 43, 43);
+}
+#sub{
+  background-color: #09b5ff;
+  font-family: voyage;
+  font-size: 3vh;
+}
+#sub:hover{
+  background-color: #d3fcff;
+}
+   </style>
+</head>
+<body>
+  <div id="main">
+    <h1>Enter Your Registered Email</h1>
+    <form action="/forgot" method="post">
+        <input type="text" name="email" required placeholder="Enter Your Registered Email">
+        <br>
+
+        <input id="sub" type="submit" value="Send Mail">
+    </form>
+  </div>
+</body>
+</html>

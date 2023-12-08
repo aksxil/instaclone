@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html,body{
+            height: 100%;
+            width: 100%;
+        }
+        #main{
+            height: 100vh;
+            width: 100%;
+            background-color: white;
+        }
+        .users{
+            height: 50px;
+            width: 40%;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+
+
+
+<div id="main">
+    <% for (const following of user.following) { %>
+        <div class="profile-follow profile-foolow-hovering">
+          <div class="profile-follow-left">
+              <div class="profile-follow-image">
+                  <img src="data:image/png;base64,<%= following.profilePic %>" alt="Profile Picture"
+                      class="profile-pic">
+              </div>
+              <div class="profile-follow-content">
+                  <a href="/profile/<%=following.username%>">
+                      <p class="profile-id">
+                          <%= following.username %>
+                      </p>
+                  </a>
+                  <a href="/profile/<%=following.username%>">
+                      <p class="profile-name">
+                          <%= following.fullName %>
+                      </p>
+                  </a>
+              </div>
+          </div>
+          <% if (isOwnProfile) { %>
+            <div id="followButtons">
+                <button style="background-color: transparent; border: none;" class="follow" data-user-id="<%= following._id %>">
+                  <%= user.following.includes(following._id) ? 'Follow' : 'Unfollow' %>
+                </button>
+              </div>
+          <% } else { %>
+            <div id="followButtons">
+                <button style="background-color: transparent; border: none;" class="follow" data-user-id="<%= following._id %>">
+                  <%= loggedInUser.following.includes(following._id) ? 'Unfollow' : 'Follow' %>
+                </button>
+              </div>
+          <% } %>
+        </div>
+      <% } %>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js" integrity="sha512-b94Z6431JyXY14iSXwgzeZurHHRNkLt9d6bAHt7BZT38eqV+GyngIi/tVye4jBKPYQ2lBdRs0glww4fmpuLRwA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+     document.addEventListener('DOMContentLoaded', () => {
+    const followButtons = document.querySelectorAll('.follow');
+
+    followButtons.forEach(button => {
+      button.addEventListener('click', async () => {
+        const userId = button.dataset.userId;
+
+        try {
+          const response = await fetch(`/toggle-follow/${userId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.ok) {
+            // Toggle the button text between Follow and Unfollow
+            button.textContent = button.textContent === 'Follow' ? 'Unfollow' : 'Follow';
+          } else {
+            console.error('Toggle follow failed');
+          }
+        } catch (error) {
+          console.error('Error toggling follow:', error);
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>

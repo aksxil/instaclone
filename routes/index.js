@@ -17,7 +17,7 @@ const { accessSync } = require('fs');
 
 
 
-mongoose.connect('mongodb://0.0.0.0/instaclone').then(()=>{
+mongoose.connect('mongodb+srv://aksx3u:T6PdawoR4sbROgUU@instaclone.oti8ify.mongodb.net/instcloneretryWrites=true&w=majority').then(()=>{
   console.log("connect to database")
 }).catch(err=>{
   console.log(err)

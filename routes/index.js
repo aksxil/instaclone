@@ -34,6 +34,13 @@ router.get('/', isloggedIn, async (req, res) => {
     // Retrieve the list of users that the logged-in user is following
     const followingUsers = loggedInUser.following;
 
+    // Fetch initial posts for users who haven't followed anyone yet
+    let initialPosts = [];
+    if (followingUsers.length === 0) {
+      // Add logic to fetch initial posts for users with no followers
+      initialPosts = await postModel.find().limit(5).populate(/* Populate as needed */);
+    }
+
     // suggested users 
     const suggestedUsers = await userModel.aggregate([
       { $match: { _id: { $nin: [...followingUsers, loggedInUser._id] } } },
@@ -57,12 +64,15 @@ router.get('/', isloggedIn, async (req, res) => {
         select: 'username profilePic fullName'
       });
 
+    // Combine initial posts with existing posts
+    posts = [...initialPosts, ...posts];
+
     // Sort posts in descending order based on createdAt
     posts = posts.sort((a, b) => b.createdAt - a.createdAt);
 
     // Find stories created by the users that the logged-in user is following
     const stories = await storyModel.find({ user: { $in: followingUsers } })
-      .populate('user' ,'username profilePic');
+      .populate('user', 'username profilePic');
 
     // Determine if the logged-in user is the owner of each comment
     posts.forEach(post => {
@@ -86,7 +96,6 @@ router.get('/', isloggedIn, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 
 router.get('/reels', isloggedIn, async (req, res) => {

@@ -38,7 +38,11 @@ router.get('/', isloggedIn, async (req, res) => {
     let initialPosts = [];
     if (followingUsers.length === 0) {
       // Add logic to fetch initial posts for users with no followers
-      initialPosts = await postModel.find().limit(5).populate(/* Populate as needed */);
+      initialPosts = await postModel.find().limit(5).populate({
+        path: 'user',
+        model: 'user',
+        select: 'username profilePic fullName'
+      });
     }
 
     // suggested users 
@@ -50,6 +54,11 @@ router.get('/', isloggedIn, async (req, res) => {
     // Find posts created by the users that the logged-in user is following
     let posts = await postModel.find({ user: { $in: followingUsers } })
       .populate({
+        path: 'user',
+        model: 'user',
+        select: 'username profilePic fullName'
+      })
+      .populate({
         path: 'comments',
         populate: {
           path: 'user',
@@ -57,7 +66,6 @@ router.get('/', isloggedIn, async (req, res) => {
           select: 'username profilePic'
         }
       })
-      .populate('user')
       .populate({
         path: 'likes',
         model: 'user',
